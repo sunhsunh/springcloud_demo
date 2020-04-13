@@ -1,0 +1,47 @@
+server:
+  port: 9091
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway: # 网关
+      ### 开启基于注册中心的路由表。gateway可以通过开启以下配置来打开根据服务的serviceId来匹配路由,
+      ### 默认是大写，如果需要小写serviceId,则配置# spring.cloud.gateway.locator.lowerCaseServiceId:true
+      discovery:
+        locator:
+          enabled: true
+      ###路由策略
+      routes:
+        ### 配置方式一：绝对路径
+          ### 路由id, 如果不写的话默认是uuid 唯一值
+        - id: baidu
+          ####转发http://www.mayikt.com/
+          uri: http://www.baidu.com/
+          ### 匹配规则
+          predicates:
+            - Path=/baidu/**
+        ### 配置方式二：根据serviceId 动态获取url路径
+        - id: payment
+          #### 基于lb负载均衡形式转发, 而是lb://开头,加上serviceId
+          uri: lb://FEIGN-SERVER
+          ### 这个是过滤器，对应的是filters 配置，有写好的过滤器，应该也可以自定义
+          filters:
+            - StripPrefix=1
+          ### 匹配规则,可以配置多个,使用正则匹配,请求地址携带***(/***/)跳转到我们配置的uri，如：uri/***
+          predicates:
+            - Path=/fs/**
+
+
+eureka:
+  instance:
+    hostname: cloud-gateway-service
+#    eureka页面展示的服务名称
+    instance-id: gateway9091
+#    eureka页面展示具体ip
+    prefer-ip-address: true
+  client:
+    service-url:
+      register-with-eureka: true
+      fetch-registry: true
+      defaultZone: http://localhost:9001/eureka,http://localhost:9002/eureka
+
