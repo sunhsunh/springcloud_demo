@@ -17,6 +17,7 @@
         <module>gateway-server</module>
         <module>common-api</module>
         <module>feign-server</module>
+        <module>data-mongo-server</module>
     </modules>
 
     <!-- 统一管理jar包版本 -->
