@@ -1,8 +1,9 @@
 package com.sun.mongo.config;
 
+
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class MongoSettingsProperties {
 
     private Integer minConnectionsPerHost = 0;

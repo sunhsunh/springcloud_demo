@@ -32,7 +32,6 @@ spring:
 #      minConnectionsPerHost: 5     #每个host的最小TCP连接数
 #      #计算允许多少个线程阻塞等待可用TCP连接时的乘数，算法：threadsAllowedToBlockForConnectionMultiplier*connectionsPerHost，当前配置允许10*20个线程阻塞
 #      threadsAllowedToBlockForConnectionMultiplier: 10
-
 eureka:
   client:
     #表示是否将自己注册进eurekaServer 默认为true

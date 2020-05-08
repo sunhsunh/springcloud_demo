@@ -13,15 +13,18 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
- * 一句话功能简述
+ * MongoDB客户端
  *
  * @author sun
  * @create 2020/4/24
@@ -125,9 +128,8 @@ public class MongoDBClient {
         return mongoTemplate.findAll(obj.getClass(), collectionName);
     }
 
-
     /**
-     * 根据条件获取总数
+     * 根据条件获取总素
      * @param query
      * @param object
      * @param collectionName
@@ -136,5 +138,42 @@ public class MongoDBClient {
     public Long count(Query query, Object object, String collectionName) {
         long tolal = mongoTemplate.count(query, object.getClass(), collectionName);
         return tolal;
+    }
+
+    /**
+     * 根据id查询
+     * @param query
+     * @param object
+     * @param collectionName
+     * @return
+     */
+    public Object findOne(Query query, Object object, String collectionName) {
+        return mongoTemplate.findOne(query, object.getClass(), collectionName);
+    }
+
+    /**
+     * 根据id更新数据
+     * @param id
+     * @param collectionName
+     * @param info
+     * @param userId
+     * @param <T>
+     * @throws IllegalAccessException
+     */
+    public <T> void updateById(String id, String collectionName, T info,Integer userId) throws IllegalAccessException {
+        Query query = new Query(Criteria.where("id").is(id));
+        Update update = new Update();
+        Class cls = info.getClass();
+        Field[] fields = cls.getDeclaredFields();
+        for(int i=0; i<fields.length; i++){
+            Field f = fields[i];
+            f.setAccessible(true);
+            if(!f.getName().equals("id")) {
+                update.set(f.getName(), f.get(info));
+            }
+        }
+        update.set("cUser",userId);
+        update.set("cTime",new Date());
+        mongoTemplate.updateMulti(query, update, info.getClass(), collectionName);
     }
 }
