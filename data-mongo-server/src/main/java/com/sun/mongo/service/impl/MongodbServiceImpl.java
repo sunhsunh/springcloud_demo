@@ -154,4 +154,10 @@ public class MongodbServiceImpl implements MongodbService {
         Query query = Query.query(Criteria.where("_id").is(user.getId()));
         return (List<User>)mongoDBClient.getByConditionAndCollectionName(query,user,"user");
     }
+
+    @Override
+    public User save(User user) {
+        User u = mongoDBClient.save(user,"user");
+        return u;
+    }
 }

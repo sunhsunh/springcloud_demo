@@ -11,6 +11,7 @@ package com.sun.mongo.controller;
 
 import com.sun.mongo.service.MongodbService;
 import com.sun.springcloud.param.UserParam;
+import com.sun.springcloud.util.BuildUserUtil;
 import com.sun.springcloud.util.PageInfo;
 import com.sun.springcloud.vo.ResponseResult;
 import com.sun.springcloud.vo.User;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * 一句话功能简述
@@ -38,6 +41,12 @@ public class MongodbTestController {
     @RequestMapping(value = "/saveOrUpdate")
     public ResponseResult saveOrUpdate(@RequestBody User user){
         User u = mongodbService.saveOrUpdate(user);
+        return new ResponseResult("200","SUCCESS",u);
+    }
+
+    @RequestMapping(value = "/save")
+    public ResponseResult save(@RequestBody User user){
+        User u = mongodbService.save(user);
         return new ResponseResult("200","SUCCESS",u);
     }
 
@@ -64,4 +73,24 @@ public class MongodbTestController {
         List<User> list = mongodbService.queryById(user);
         return new ResponseResult("200","SUCCESS",list);
     }
+
+    @RequestMapping(value = "/batchSave")
+    public void batchSave(){
+        for(int i = 1;i<=1000;i++){
+            User user = new User();
+            user.setId(i+"");
+            Map map = BuildUserUtil.getAddress();
+            user.setName(map.get("name").toString());
+            user.setAge(Integer.parseInt(map.get("age").toString()));
+            user.setSex(Integer.parseInt(map.get("sex").toString()));
+            user.setProvince(map.get("province").toString());
+            user.setCity(map.get("city").toString());
+            user.setAddress(map.get("address").toString());
+            user.setPhone(map.get("phone").toString());
+            mongodbService.save(user);
+        }
+    }
+
+
+
 }

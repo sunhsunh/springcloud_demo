@@ -24,13 +24,15 @@ import java.util.List;
  * @since v1.0.0
  */
 public interface MongodbService {
-    User saveOrUpdate(@RequestBody User user);
+    User saveOrUpdate(User user);
 
-    Integer delete(@RequestBody User user);
+    Integer delete(User user);
 
-    List<User> queryWithCondition(@RequestBody UserParam param);
+    List<User> queryWithCondition(UserParam param);
 
-    PageInfo<User> queryWithPageByCondition(@RequestBody UserParam param);
+    PageInfo<User> queryWithPageByCondition(UserParam param);
 
-    List<User> queryById(@RequestBody User user);
+    List<User> queryById( User user);
+
+    User save(User user);
 }

@@ -6,12 +6,12 @@ spring:
     name: mongodb-server
   data:
     mongodb:
-      username: root
+      username: test
       password: passwd
-      host: 144.34.217.100
+      host: 152.136.198.222
       port: 27017
-      database: lced
-      authentication-database: lced
+      database: test
+      authentication-database: test
 #      database: lced
 #      username: root
 #      password: passwd
